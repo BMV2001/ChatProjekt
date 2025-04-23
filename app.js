@@ -2,7 +2,7 @@ import express from 'express'
 import session from 'express-session'
 
 //bør ligge i en database 
-let globalrooms = [{id: 1, chatnavn: "Jazzkaj ved søen", opretDato: undefined, ejer: undefined, chat: ["Hesten er meget stor Jens"]}, {id: 2, chatnavn: "Andreas papegøjefest", opretDato: undefined, ejer: undefined, chat: []}, {id: 3, chatnavn: "Connys strikkeklub", opretDato: undefined, ejer: undefined, chat: []}]
+let globalrooms = [{id: 1, chatnavn: "Jazzkaj ved søen", opretDato: undefined, ejer: undefined, chat: []}, {id: 2, chatnavn: "Andreas papegøjefest", opretDato: undefined, ejer: undefined, chat: []}, {id: 3, chatnavn: "Connys strikkeklub", opretDato: undefined, ejer: undefined, chat: []}]
 
 //init
 const app = express()
