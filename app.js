@@ -29,6 +29,7 @@ app.get('/', (request, response) => {
 })
 
 app.get('/chats/:id', (request, response) => {
+    let 1 = globalrooms.findIndex 
     response.render('chatside', {})
 })
 
