@@ -18,9 +18,26 @@ app.use(session({
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use(express.static('assets'))
+app.use(validateLogin)
+
+function validateLogin(){
+    //todo
+}
 
 
 //endpoints
+app.get('/login', (request, response) => {
+    //todo - benyt validateLogin() metoden
+    /*if (validateLogin() == true){
+    gør noget med brugerens session
+    }
+    else {
+    giv bruger besked om fejlet login
+    }
+    */
+})
+
+//Obligatoriske endpoints
 app.get('/', (request, response) => {
     if (request.session.chatlist === undefined){
         request.session.chatlist = []
