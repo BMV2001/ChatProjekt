@@ -5,8 +5,8 @@ html
     body
         h Denne side skal vise den faktiske chat 
         ul 
-            each message in chatroom.chat
-                li: message 
+            each besked in chatroom.chat
+             li: p #{besked}
 
         textarea(id="message", placeholder= "Skriv for satan!")
         br
