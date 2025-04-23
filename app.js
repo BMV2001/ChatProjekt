@@ -41,4 +41,4 @@ app.post("/createroom", (request, response) => {
     response.redirect("/")
 })
 
-app.listen(6789, () => console.log("Det spiller chef"))
+app.listen(6688, () => console.log("Det spiller chef"))
