@@ -52,13 +52,4 @@ app.get('/users/:id/messages', (request, response) => {
     //To do
 });
 
-app.get("/createchat", (request, response) => {
-    response.render('create', {})
-})
-
-app.post("/createroom", (request, response) => {
-    //opret den nye chat og tilføj den til globale chats her!
-    response.redirect("/")
-})
-
 app.listen(6688, () => console.log("Det spiller chef"))
