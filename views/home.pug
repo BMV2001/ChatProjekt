@@ -4,7 +4,8 @@ html
     body 
         h Velkommen #{usersession.id}
         br
-        button: a(href="/createchat") Opret nyt chatrum!
+        button: a(href="/login") Log ind
+        button: a(href="/createuser") Opret bruger
 
         if chatlist.length <= 0
             p Eder thi er ej del af nogle chats! Du må være ensom
@@ -18,4 +19,6 @@ html
         p globale chatrum: 
             ul 
                 each chat in globalchats 
-                    li: a(href="/chats/"+chat.chatnavn) #{chat.chatnavn}
+                    li: a(href="/chats/"+chat.id) #{chat.chatnavn}
+
+    
