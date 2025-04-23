@@ -19,4 +19,6 @@ html
         p globale chatrum: 
             ul 
                 each chat in globalchats 
-                    li: a(href="/chats/"+chat.chatnavn) #{chat.chatnavn}
+                    li: a(href="/chats/"+chat.id) #{chat.chatnavn}
+
+    
