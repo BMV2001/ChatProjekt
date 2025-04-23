@@ -33,8 +33,7 @@ app.get('/chats/:id', (request, response) => {
 })
 
 app.get('/chats/:id/messages', (request, response) => {
-    //hent beskederne fra databasen og send dem til chatvinduet
-    response.json({})
+    //To do
 })
 
 app.get('/chats/messages/:id', (request, response) => {
