@@ -32,6 +32,26 @@ app.get('/chats/:id', (request, response) => {
     response.render('chatside', {})
 })
 
+app.get('/chats/:id/messages', (request, response) => {
+    //To do
+})
+
+app.get('/chats/messages/:id', (request, response) => {
+    //To do
+});
+
+app.get('/users', (request, response) => {
+    //To do
+});
+
+app.get('/users/:id', (request, response) => {
+    //To do
+});
+
+app.get('/users/:id/messages', (request, response) => {
+    //To do
+});
+
 app.get("/createchat", (request, response) => {
     response.render('create', {})
 })
