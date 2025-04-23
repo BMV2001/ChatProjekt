@@ -1,0 +1,13 @@
+html 
+    head 
+        title Opret nyt chatrum
+        
+        script(src="scripts/createchat.js", defer)
+    body 
+        h Denne side skal kunne indtaste informationer til et nyt chatrum, benytte en POST metode til at lave opdateringen, og derefter redirecte tilbage til startsiden
+        br
+        textarea(id="chatnavn")
+        br
+        button(id="create") opret chat! 
+        br
+        button: a(href= "/") Annuler 
