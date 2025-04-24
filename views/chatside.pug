@@ -1,13 +1,15 @@
 html 
     head 
         title Chatrum
-        script(src= "scripts/messageHandler.js", defer)
+        script(src= "/scripts/messageHandler.js", defer)
     body
         h Denne side skal vise den faktiske chat 
         ul 
             each besked in chatroom.chat
              li: p #{besked}
 
-        textarea(id="message", placeholder= "Skriv for satan!")
+        textarea(id="message", placeholder= "Skriv for satan!", owner= "SKAL VÆRE BRUGER ID!", chatid= chatroom.id)
+        br
+        button(id="send") fyr
         br
         a(href= "/") kom tilbage her
