@@ -6,6 +6,7 @@ async function validateLogin(username, password) {
     try {
     let rawtext = await readFile("assets/DB/loginDB.JSON", "utf8")
     let objectList = JSON.parse(rawtext)
+    
     for (let user of objectList){
         if (user.un === username && user.pw === password){
             return user
@@ -33,7 +34,6 @@ async function createUser(username, password){
         if (!userNameOccupied){
             newUserObject = {un:username, pw:password, lv:2}
             objectList.push(newUserObject)
-            console.log(objectList);
             await writeFile('assets/DB/loginDB.JSON', JSON.stringify(objectList))
         }
         return newUserObject
