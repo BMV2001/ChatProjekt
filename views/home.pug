@@ -2,20 +2,38 @@ html
     head 
         title chatrooms
     body 
-        h Velkommen #{usersession.id}
-        br
-        button: a(href="/login") Log ind
-        button: a(href="/createuser") Opret bruger
+        if usersession.login != true
+            h1 Velkommen! 
+            h Du er ikke logget ind, men kan fortsætte som gæst.
+                    
+            form(action="/login", method="POST")
+                input(name="un", type="text", placeholder="brugernavn")
+                input(name="pw", type="password", placeholder="adgangskode")
+                br
+                button(type="submit") log ind
+            h Har du ikke en bruger?
+            br
 
-        if chatlist.length <= 0
-            p Eder thi er ej del af nogle chats! Du må være ensom
-
+            form(action="/createuser", method="POST")
+                input(name="un", type="text", placeholder="brugernavn", minlength="3")
+                input(name="pw", type="text", placeholder="adgangskode", minlength="5")
+                br
+                button(type="submit") Opret dig her!
         else 
-            p chatlistens størrelse: #{chatlist.length}
-            ul 
-                each chat in chatlist
-                    li chat 
+            h Velkommen #{usersession.username}
+            form(action="/logud", method="POST")
+                button(type="submit") log ud
 
+            if chatlist.length <= 0
+                p Eder thi er ej del af nogle chats! Du må være ensom
+
+            else 
+                p chatlistens størrelse: #{chatlist.length}
+                ul 
+                    each chat in chatlist
+                        li chat 
+        br
+        
         p globale chatrum: 
             ul 
                 each chat in globalchats 

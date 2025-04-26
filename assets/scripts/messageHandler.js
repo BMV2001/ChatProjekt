@@ -9,6 +9,7 @@ function sendMessage(){
 
     let messageObject = {messageid: owner+chatid+Date().substring(0, 24), owner: owner, message: message, timestamp: Date(), chatroomid: chatid}
                 //Messageid må gerne være lidt mindre uoverskuelig
+
     console.log(messageObject);
 
 }

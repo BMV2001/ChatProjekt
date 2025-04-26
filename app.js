@@ -1,5 +1,6 @@
-import express from 'express'
+import express, { response } from 'express'
 import session from 'express-session'
+import { validateLogin, createUser } from './assets/scripts/userHandler.js'
 
 //bør ligge i en database 
 let globalrooms = [{id: 1, chatnavn: "Jazzkaj ved søen", opretDato: undefined, ejer: undefined, chat: []}, {id: 2, chatnavn: "Andreas papegøjefest", opretDato: undefined, ejer: undefined, chat: []}, {id: 3, chatnavn: "Connys strikkeklub", opretDato: undefined, ejer: undefined, chat: []}]
@@ -18,29 +19,43 @@ app.use(session({
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use(express.static('assets'))
-//app.use(validateLogin)
 
-function validateLogin(){
-    //todo
-}
 
 
 //endpoints
-app.get('/login', (request, response) => {
-    //todo - benyt validateLogin() metoden
-    /*if (validateLogin() == true){
-    gør noget med brugerens session
-    }
-    else {
-    giv bruger besked om fejlet login
-    }
-    */
+app.post('/login', (request, response) => {
+    let username = request.body.un
+    let password = request.body.pw
+    validateLogin(username, password).then((user) => {
+        if (user != undefined){
+            setSession(user, request.session)
+        }
+            response.redirect("/")
+    })
+})
+
+app.post('/logud', (request, response) => {
+    request.session.destroy()
+    response.redirect('/')
+})
+
+//Bør være en PUT request! Men da pug-Form ikke understøtter det...
+app.post('/createuser', (request, response) => {
+    let username = request.body.un
+    let password = request.body.pw
+    createUser(username, password).then((user) => {
+        if (user != undefined){
+            setSession(user, request.session)
+        }
+        response.redirect("/")        
+    })
 })
 
 //Obligatoriske endpoints
 app.get('/', (request, response) => {
     if (request.session.chatlist === undefined){
         request.session.chatlist = []
+        request.session.login = false
     }
     response.render('home', {usersession: request.session, chatlist: request.session.chatlist, globalchats: globalrooms})
 })
@@ -72,3 +87,11 @@ app.get('/users/:id/messages', (request, response) => {
 });
 
 app.listen(6789, () => console.log("Det spiller chef"))
+
+//funktioner
+
+function setSession(user, session){
+    session.login = true;
+    session.username = user.un
+    session.lv = user.lv
+}
