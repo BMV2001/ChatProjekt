@@ -1,15 +1,17 @@
 html 
     head 
         title Chatrum
-        script(src= "/scripts/messageHandler.js", defer)
     body
-        h Denne side skal vise den faktiske chat 
+        h Chatrum for #{chatnavn} 
         ul 
-            each besked in chatroom.chat
+            each besked in chatcontainer 
              li: p #{besked}
 
-        textarea(id="message", placeholder= "Skriv for satan!", owner= "SKAL VÆRE BRUGER ID!", chatid= chatroom.id)
-        br
-        button(id="send") fyr
-        br
+        form(action="/postmessage", method="POST")
+            input(name = "message", type="text", placeholder= "Skriv for satan!")
+            input(name = "username", type="hidden", value= username) 
+            input(name = "chatid", type="hidden", value= chatid) 
+            br
+            button(type="submit", id="send") fyr
+        
         a(href= "/") kom tilbage her
