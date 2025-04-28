@@ -71,4 +71,4 @@ app.get('/users/:id/messages', (request, response) => {
     //To do
 });
 
-app.listen(6789, () => console.log("Det spiller chef"))
+app.listen(6789, () => console.log("localhost:6789"))
