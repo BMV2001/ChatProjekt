@@ -1,6 +1,3 @@
-let sendButton = document.getElementById("send")
-
-sendButton.addEventListener("click", sendMessage)
 
 function sendMessage(){
     let message = document.getElementById("message").value
@@ -11,5 +8,7 @@ function sendMessage(){
                 //Messageid må gerne være lidt mindre uoverskuelig
 
     console.log(messageObject);
-
+    return undefined
 }
+
+export {sendMessage}
