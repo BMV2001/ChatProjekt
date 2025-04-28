@@ -2,15 +2,18 @@ html
     head 
         title Chatrum
     body
-        h Chatrum for #{chatnavn} 
+        h Chatrum for #{chatnavn}
+        br
+        h Dit navn for chatten: #{username}
         ul 
             each besked in chatcontainer 
-             li: p #{besked}
+             li: a(href="/"+chatid+"/messages/"+besked.messageid) #{besked.owner}: #{besked.message}
 
         form(action="/postmessage", method="POST")
             input(name = "message", type="text", placeholder= "Skriv for satan!")
             input(name = "username", type="hidden", value= username) 
             input(name = "chatid", type="hidden", value= chatid) 
+            input(name= "chatcontainer", type="hidden", value= chatcontainer)
             br
             button(type="submit", id="send") fyr
         

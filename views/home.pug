@@ -24,6 +24,11 @@ html
             form(action="/logud", method="POST")
                 button(type="submit") log ud
 
+            if usersession.lv == 3
+                h Spil gud over de fortabte sjæle!
+                br
+                button: a(href="/users") Liste over brugere
+
             if chatlist.length <= 0
                 p Eder thi er ej del af nogle chats! Du må være ensom
 
@@ -37,6 +42,6 @@ html
         p globale chatrum: 
             ul 
                 each chat in globalchats 
-                    li: a(href="/chats/"+chat.id) #{chat.chatnavn}
+                    li: a(href="/chats/"+chat.id+"/messages") #{chat.chatnavn}
 
     

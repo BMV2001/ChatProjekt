@@ -34,8 +34,6 @@ async function createUser(username, password){
         if (!userNameOccupied){
             newUserObject = {un:username, pw:password, lv:2}
             objectList.push(newUserObject)
-            
-            console.log(objectList);
             await writeFile('assets/DB/loginDB.JSON', JSON.stringify(objectList))
         }
         return newUserObject
@@ -46,4 +44,9 @@ async function createUser(username, password){
     }
 }
 
-export {validateLogin, createUser}
+async function getUsers(){
+    let rawtext = await readFile("assets/DB/loginDB.JSON", "utf8")
+    return JSON.parse(rawtext)
+}
+
+export {validateLogin, createUser, getUsers}
