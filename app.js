@@ -1,6 +1,7 @@
 import express, { response } from 'express'
 import session from 'express-session'
 import { validateLogin, createUser } from './assets/scripts/userHandler.js'
+import methodOverride from 'method-override'
 import { sendMessage } from './assets/scripts/messageHandler.js'
 
 //bør ligge i en database 
@@ -21,6 +22,8 @@ app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use(express.static('assets'))
 
+//Test
+app.use(methodOverride('_method'))
 
 
 //endpoints
@@ -41,7 +44,7 @@ app.post('/logud', (request, response) => {
 })
 
 //Bør være en PUT request! Men da pug-Form ikke understøtter det...
-app.post('/createuser', (request, response) => {
+app.put('/createuser', (request, response) => {
     let username = request.body.un
     let password = request.body.pw
     createUser(username, password).then((user) => {
@@ -69,6 +72,8 @@ app.get('/', (request, response) => {
     if (request.session.chatlist === undefined){
         request.session.chatlist = []
         request.session.login = false
+        request.session.un = "guest"
+        request.session.lv = 1
     }
     response.render('home', {usersession: request.session, chatlist: request.session.chatlist, globalchats: globalrooms})
 })

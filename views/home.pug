@@ -14,7 +14,7 @@ html
             h Har du ikke en bruger?
             br
 
-            form(action="/createuser", method="POST")
+            form(action="/createuser?_method=PUT", method="POST")
                 input(name="un", type="text", placeholder="brugernavn", minlength="3")
                 input(name="pw", type="text", placeholder="adgangskode", minlength="5")
                 br

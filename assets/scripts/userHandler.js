@@ -34,6 +34,8 @@ async function createUser(username, password){
         if (!userNameOccupied){
             newUserObject = {un:username, pw:password, lv:2}
             objectList.push(newUserObject)
+            
+            console.log(objectList);
             await writeFile('assets/DB/loginDB.JSON', JSON.stringify(objectList))
         }
         return newUserObject
