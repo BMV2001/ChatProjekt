@@ -20,7 +20,7 @@ html
                 br
                 button(type="submit") Opret dig her!
         else 
-            h Velkommen #{usersession.username}
+            h Velkommen #{usersession.un}
             form(action="/logud", method="POST")
                 button(type="submit") log ud
 

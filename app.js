@@ -21,8 +21,7 @@ app.use(session({
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use(express.static('assets'))
-
-//Test
+//methodOverride -> opretter proper put-requests for opretBruger
 app.use(methodOverride('_method'))
 
 
@@ -43,7 +42,6 @@ app.post('/logud', (request, response) => {
     response.redirect('/')
 })
 
-//Bør være en PUT request! Men da pug-Form ikke understøtter det...
 app.put('/createuser', (request, response) => {
     let username = request.body.un
     let password = request.body.pw
@@ -56,8 +54,8 @@ app.put('/createuser', (request, response) => {
 })
 
 app.post('/postmessage', (request, response) => {
-    let roomID = request.body.chatid.data
-    let messageOwner = request.body.username.data
+    let roomID = request.body.chatid
+    let messageOwner = request.body.username
     let message = request.body.message
 
     console.log(roomID+", "+message+", "+messageOwner);
@@ -110,6 +108,6 @@ app.listen(6789, () => console.log("Det spiller chef"))
 
 function setSession(user, session){
     session.login = true;
-    session.username = user.un
+    session.un = user.un
     session.lv = user.lv
 }

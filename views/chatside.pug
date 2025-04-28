@@ -9,8 +9,8 @@ html
 
         form(action="/postmessage", method="POST")
             input(name = "message", type="text", placeholder= "Skriv for satan!")
-            input(name = "username", type="hidden", data= username) 
-            input(name = "chatid", type="hidden", data= chatid) 
+            input(name = "username", type="hidden", value= username) 
+            input(name = "chatid", type="hidden", value= chatid) 
             br
             button(type="submit", id="send") fyr
         
