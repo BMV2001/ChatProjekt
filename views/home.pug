@@ -20,7 +20,7 @@ html
                 br
                 button(type="submit") Opret dig her!
         else 
-            h Velkommen #{usersession.username}
+            h Velkommen #{usersession.un}
             form(action="/logud", method="POST")
                 button(type="submit") log ud
 
@@ -38,5 +38,9 @@ html
             ul 
                 each chat in globalchats 
                     li: a(href="/chats/"+chat.id) #{chat.chatnavn}
+        br
 
+        form(action="/createchat", method="POST")
+            input(type="text", name="chatnavn", id="chatnavn", placeholder="Indtast chatnavn", required)
+            button(type="submit") Opret chatrum!
     

@@ -1,8 +1,8 @@
 import express, { response } from 'express'
 import session from 'express-session'
 import { validateLogin, createUser } from './assets/scripts/userHandler.js'
-import { sendMessage } from './assets/scripts/messageHandler.js'
 import methodOverride from 'method-override'
+import { sendMessage } from './assets/scripts/messageHandler.js'
 
 //bør ligge i en database 
 let globalrooms = [{id: 1, chatnavn: "Jazzkaj ved søen", opretDato: undefined, ejer: undefined, chat: []}, {id: 2, chatnavn: "Andreas papegøjefest", opretDato: undefined, ejer: undefined, chat: []}, {id: 3, chatnavn: "Connys strikkeklub", opretDato: undefined, ejer: undefined, chat: []}]
@@ -21,8 +21,7 @@ app.use(session({
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use(express.static('assets'))
-
-//Test
+//methodOverride -> opretter proper put-requests for opretBruger
 app.use(methodOverride('_method'))
 
 
@@ -43,7 +42,6 @@ app.post('/logud', (request, response) => {
     response.redirect('/')
 })
 
-//Bør være en PUT request! Men da pug-Form ikke understøtter det...
 app.put('/createuser', (request, response) => {
     let username = request.body.un
     let password = request.body.pw
@@ -56,7 +54,6 @@ app.put('/createuser', (request, response) => {
 })
 
 app.post('/postmessage', (request, response) => {
-    console.log(request.body);
     let roomID = request.body.chatid
     let messageOwner = request.body.username
     let message = request.body.message
@@ -64,7 +61,7 @@ app.post('/postmessage', (request, response) => {
     console.log(roomID + " " + message + " " + messageOwner);
     //sendMessage(username, roomID, message, messageOwner)
 
-    response.redirect(chats/roomID)
+    response.redirect("chats/"+roomID)
 
 })
 
@@ -105,12 +102,40 @@ app.get('/users/:id/messages', (request, response) => {
     //To do
 });
 
+app.get('/', (request, response) => {
+    if (request.session.login == true){
+        response.render('createchat', {usersession: request.session})
+    } else {
+        response.redirect('/')
+    }
+})
+
+app.post('/createchat', (request, response) => {
+    const chatnavn = request.body.chatnavn
+
+    const existingChat = globalrooms.find(chat => chat.chatnavn === chatnavn);
+    if (existingChat) {
+        
+    }
+
+    const newChat = {
+        id: globalrooms.length + 1,
+        chatnavn: chatnavn,
+        opretDato: new Date(),
+        ejer: request.session.un,
+        chat: []
+    }
+    globalrooms.push(newChat)
+
+    response.redirect('/chats/' + newChat.id)
+})
+
 app.listen(6789, () => console.log("Det spiller chef"))
 
 //funktioner
 
 function setSession(user, session){
     session.login = true;
-    session.username = user.un
+    session.un = user.un
     session.lv = user.lv
 }
