@@ -28,6 +28,8 @@
     "test": ""
   },
   "dependencies": {
+    "alert": "^6.0.2",
+    "alert-node": "^5.0.1",
     "express": "^5.1.0",
     "express-session": "^1.18.1",
     "method-override": "^3.0.0",

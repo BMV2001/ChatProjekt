@@ -1,11 +1,9 @@
 import express, { response } from 'express'
 import session from 'express-session'
 import { validateLogin, createUser, getUsers } from './assets/scripts/userHandler.js'
+import { newChat, getChatList } from './assets/scripts/chatHandler.js'
 import methodOverride from 'method-override'
 import { sendMessage } from './assets/scripts/messageHandler.js'
-
-//bør ligge i en database 
-let globalrooms = [{id: 1, chatnavn: "Jazzkaj ved søen", opretDato: undefined, ejer: undefined, chat: []}, {id: 2, chatnavn: "Andreas papegøjefest", opretDato: undefined, ejer: undefined, chat: []}, {id: 3, chatnavn: "Connys strikkeklub", opretDato: undefined, ejer: undefined, chat: []}]
 
 //init
 const app = express()
@@ -54,11 +52,12 @@ app.put('/createuser', (request, response) => {
     })
 })
 
-app.post('/postmessage', (request, response) => {
+app.post('/postmessage', async (request, response) => {
+    let data = await getChatList()
     let chatID = request.body.chatid
     let owner = request.body.username
     let message = request.body.message
-    let chatroom = globalrooms.find((chat) => chat.id == chatID)
+    let chatroom = data.find((chat) => chat.id == chatID)
     chatroom.chat.push(sendMessage(message, owner, chatID, chatroom.chat))
 
     response.redirect(`/chats/${chatID}/messages`)
@@ -75,20 +74,23 @@ app.delete('/deletemessage/:chatid/:messageid', (request, response) => {
 
 //Endpointet /chats og /chats/:id er tilgængeligt fra /(root) endpointet 
 
-app.get('/', (request, response) => {
-    response.render('home', {usersession: request.session, chatlist: request.session.chatlist, globalchats: globalrooms})
+app.get('/', async (request, response) =>  {
+    let data = await getChatList()
+    response.render('home', {usersession: request.session, chatlist: request.session.chatlist, globalchats: data})
 })
 
-app.get('/chats/:id/messages', (request, response) => {
+app.get('/chats/:id/messages', async (request, response) => {
     let id = request.params.id
-    let specificRoom = globalrooms.find((chat) => chat.id == id)
+    let data = await getChatList()
+    let specificRoom = data.find((chat) => chat.id == id)
 
     response.render('chatside', {chatnavn: specificRoom.chatnavn, chatcontainer: specificRoom.chat, chatid: specificRoom.id, username: request.session.un})
 })
 
-app.get('/:chats/messages/:id', (request, response) => {
-    let specificmessage = globalrooms.find((room) => room.id == request.params.chats).chat.find((message) => message.messageid === request.params.id)
-    response.render('specificmessage', {message: specificmessage, sessionname: request.session.un, sessionlv: request.session.lv})
+app.get('/:chats/messages/:id', async (request, response) => {
+    let data = await getChatList()
+    let specificmessage = data.find((room) => room.id == request.params.chats).chat.find((message) => message.messageid === request.params.id)
+    response.render('specificmessage', {message: specificmessage})
 });
 
 /////lv.3 superbruger adgange/////
@@ -107,6 +109,25 @@ app.get('/users/:id', (request, response) => {
 
 app.get('/users/:id/messages', (request, response) => {
     //To do
+});
+
+app.post('/createchat', async (request, response) => {
+    const chatnavn = request.body.chatnavn;
+    let data = await getChatList()
+
+    try {
+        const newChatObj = await newChat(chatnavn, request.session.un, data);
+        console.log(newChatObj);
+        response.redirect(`/chats/${newChatObj.id}/messages`);
+    } catch (error) {
+        console.error('Error creating chat:', error.message);
+        response.render('home', {
+            usersession: request.session,
+            chatlist: request.session.chatlist,
+            globalchats: data,
+            error: error.message
+        });
+    }
 });
 
 app.listen(6789, () => console.log("Det spiller chef"))

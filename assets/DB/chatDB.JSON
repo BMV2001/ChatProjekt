@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "chatnavn": "Jazzkaj ved søen",
+    "opretDato": "undefined",
+    "ejer": "undefined",
+    "chat": []
+  },
+  {
+    "id": 2,
+    "chatnavn": "Andreas papegøjefest",
+    "opretDato": "undefined",
+    "ejer": "undefined",
+    "chat": []
+  },
+  {
+    "id": 3,
+    "chatnavn": "Connys strikkeklub",
+    "opretDato": "undefined",
+    "ejer": "undefined",
+    "chat": []
+  },
+  {
+    "id": 4,
+    "chatnavn": "test1",
+    "opretDato": "2025-04-30T17:18:11.555Z",
+    "ejer": "test1",
+    "chat": []
+  }
+]

@@ -37,11 +37,17 @@ html
                 ul 
                     each chat in chatlist
                         li chat 
-        br
+            br
         
         p globale chatrum: 
             ul 
                 each chat in globalchats 
                     li: a(href="/chats/"+chat.id+"/messages") #{chat.chatnavn}
 
+            if error 
+                p.error-message #{error}
+        if usersession.login == true
+            form(action="/createchat", method="POST")
+                input(type="text", name="chatnavn", id="chatnavn", placeholder="Indtast chatnavn", required)
+                button(type="submit") Opret chatrum!
     
