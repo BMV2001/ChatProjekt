@@ -68,7 +68,7 @@ app.delete('/deletemessage/:chatid/:messageid', (request, response) => {
     const chatid = request.params.chatid
     const messageid = request.params.messageid
     console.log(messageid+","+chatid)
-    
+    //benyt Asgers getChatsList til at finde den rigtige chat og derefter den specifikke message
 })
 
 //Obligatoriske endpoints
