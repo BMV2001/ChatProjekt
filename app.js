@@ -3,7 +3,7 @@ import session from 'express-session'
 import { validateLogin, createUser, getUsers } from './assets/scripts/userHandler.js'
 import { newChat, getChatList } from './assets/scripts/chatHandler.js'
 import methodOverride from 'method-override'
-import { sendMessage } from './assets/scripts/messageHandler.js'
+import { deleteMessage, sendMessage } from './assets/scripts/messageHandler.js'
 
 //init
 const app = express()
@@ -65,10 +65,8 @@ app.post('/postmessage', async (request, response) => {
 app.delete('/deletemessage/:chatid/:messageid', (request, response) => {
     const chatid = request.params.chatid
     const messageid = request.params.messageid
-    let chatroom = getChatList().then((chatlist) => chatlist.find((chat) => chat.id == chatid))
-    console.log(chatroom);
-    //const updatedChat = chatroom.chat.filter((message) => message.messageid != messageid)
-    //chatroom.chat = updatedChat
+    deleteMessage(chatid, messageid)
+    response.sendStatus(200)
 })
 
 //Obligatoriske endpoints
@@ -91,7 +89,7 @@ app.get('/chats/:id/messages', async (request, response) => {
 app.get('/:chats/messages/:id', async (request, response) => {
     let data = await getChatList()
     let specificmessage = data.find((room) => room.id == request.params.chats).chat.find((message) => message.messageid === request.params.id)
-    response.render('specificmessage', {message: specificmessage})
+    response.render('specificmessage', {message: specificmessage, sessionname: request.session.un, sessionlv: request.session.lv})
 });
 
 /////lv.3 superbruger adgange/////
