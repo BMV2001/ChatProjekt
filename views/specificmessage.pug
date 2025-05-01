@@ -1,0 +1,16 @@
+html
+    head
+        title besked
+    body
+        h besked identifikation: #{message.messageid}
+        br
+        h besked ejer: #{message.owner}
+        br
+        h besked indhold: #{message.message}
+        br
+        h sendt: #{message.timestamp}
+        br
+        h tilhørende chatrumID: #{message.chatroomid}
+
+        br
+        a(href='/chats/'+message.chatroomid+"/messages") Gå tilbage til chatten her

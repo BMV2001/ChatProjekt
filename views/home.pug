@@ -24,6 +24,11 @@ html
             form(action="/logud", method="POST")
                 button(type="submit") log ud
 
+            if usersession.lv == 3
+                h Spil gud over de fortabte sjæle!
+                br
+                button: a(href="/users") Liste over brugere
+
             if chatlist.length <= 0
                 p Eder thi er ej del af nogle chats! Du må være ensom
 
@@ -32,15 +37,17 @@ html
                 ul 
                     each chat in chatlist
                         li chat 
-        br
+            br
         
         p globale chatrum: 
             ul 
                 each chat in globalchats 
-                    li: a(href="/chats/"+chat.id) #{chat.chatnavn}
-        br
+                    li: a(href="/chats/"+chat.id+"/messages") #{chat.chatnavn}
 
-        form(action="/createchat", method="POST")
-            input(type="text", name="chatnavn", id="chatnavn", placeholder="Indtast chatnavn", required)
-            button(type="submit") Opret chatrum!
+            if error 
+                p.error-message #{error}
+        if usersession.login == true
+            form(action="/createchat", method="POST")
+                input(type="text", name="chatnavn", id="chatnavn", placeholder="Indtast chatnavn", required)
+                button(type="submit") Opret chatrum!
     
