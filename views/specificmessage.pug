@@ -1,16 +1,19 @@
 html
     head
         title besked
+        script(async, defer, src="/scripts/deleteMessage.js")
     body
-        h besked identifikation: #{message.messageid}
+        p(id="messageid", itemid=message.messageid) besked identifikation: #{message.messageid}
         br
-        h besked ejer: #{message.owner}
+        p besked ejer: #{message.owner}
         br
-        h besked indhold: #{message.message}
+        p besked indhold: #{message.message}
         br
-        h sendt: #{message.timestamp}
+        p sendt: #{message.timestamp}
         br
-        h tilhørende chatrumID: #{message.chatroomid}
-
+        p(id="chatid", itemid=message.chatroomid) tilhørende chatrumID: #{message.chatroomid}
+        br
+        if (sessionname != guest && message.owner == sessionname) || (sessionlv == 3)
+        button(id="deletebutton" type="submit") Slet besked 
         br
         a(href='/chats/'+message.chatroomid+"/messages") Gå tilbage til chatten her

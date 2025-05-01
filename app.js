@@ -62,7 +62,13 @@ app.post('/postmessage', (request, response) => {
     chatroom.chat.push(sendMessage(message, owner, chatID, chatroom.chat))
 
     response.redirect(`/chats/${chatID}/messages`)
+})
 
+app.delete('/deletemessage/:chatid/:messageid', (request, response) => {
+    const chatid = request.params.chatid
+    const messageid = request.params.messageid
+    console.log(messageid+","+chatid)
+    
 })
 
 //Obligatoriske endpoints
@@ -82,7 +88,7 @@ app.get('/chats/:id/messages', (request, response) => {
 
 app.get('/:chats/messages/:id', (request, response) => {
     let specificmessage = globalrooms.find((room) => room.id == request.params.chats).chat.find((message) => message.messageid === request.params.id)
-    response.render('specificmessage', {message: specificmessage})
+    response.render('specificmessage', {message: specificmessage, sessionname: request.session.un, sessionlv: request.session.lv})
 });
 
 /////lv.3 superbruger adgange/////
