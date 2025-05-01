@@ -92,7 +92,6 @@ app.get('/:chats/messages/:id', async (request, response) => {
     response.render('specificmessage', {message: specificmessage, sessionname: request.session.un, sessionlv: request.session.lv})
 });
 
-/////lv.3 superbruger adgange/////
 app.get('/users', (request, response) => {
     if (request.session.lv != 3){
         response.redirect('/')
@@ -116,7 +115,6 @@ app.post('/createchat', async (request, response) => {
 
     try {
         const newChatObj = await newChat(chatnavn, request.session.un, data);
-        console.log(newChatObj);
         response.redirect(`/chats/${newChatObj.id}/messages`);
     } catch (error) {
         console.error('Error creating chat:', error.message);
