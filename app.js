@@ -58,16 +58,17 @@ app.post('/postmessage', async (request, response) => {
     let owner = request.body.username
     let message = request.body.message
     let chatroom = data.find((chat) => chat.id == chatID)
-    chatroom.chat.push(sendMessage(message, owner, chatID, chatroom.chat))
-
+    sendMessage(message, owner, chatID, chatroom.chat)
     response.redirect(`/chats/${chatID}/messages`)
 })
 
 app.delete('/deletemessage/:chatid/:messageid', (request, response) => {
     const chatid = request.params.chatid
     const messageid = request.params.messageid
-    console.log(messageid+","+chatid)
-    //benyt Asgers getChatsList til at finde den rigtige chat og derefter den specifikke message
+    let chatroom = getChatList().then((chatlist) => chatlist.find((chat) => chat.id == chatid))
+    console.log(chatroom);
+    //const updatedChat = chatroom.chat.filter((message) => message.messageid != messageid)
+    //chatroom.chat = updatedChat
 })
 
 //Obligatoriske endpoints
