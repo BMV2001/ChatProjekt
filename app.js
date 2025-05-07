@@ -1,9 +1,9 @@
 import express, { response } from 'express'
 import session from 'express-session'
 import { validateLogin, createUser, getUsers } from './assets/scripts/userHandler.js'
-import { newChat, getChatList } from './assets/scripts/chatHandler.js'
+import { newChat, getChatList, createdChatrooms } from './assets/scripts/chatHandler.js'
 import methodOverride from 'method-override'
-import { sendMessage } from './assets/scripts/messageHandler.js'
+import { deleteMessage, sendMessage } from './assets/scripts/messageHandler.js'
 
 //init
 const app = express()
@@ -65,10 +65,8 @@ app.post('/postmessage', async (request, response) => {
 app.delete('/deletemessage/:chatid/:messageid', (request, response) => {
     const chatid = request.params.chatid
     const messageid = request.params.messageid
-    let chatroom = getChatList().then((chatlist) => chatlist.find((chat) => chat.id == chatid))
-    console.log(chatroom);
-    //const updatedChat = chatroom.chat.filter((message) => message.messageid != messageid)
-    //chatroom.chat = updatedChat
+    deleteMessage(chatid, messageid)
+    response.sendStatus(200)
 })
 
 //Obligatoriske endpoints
@@ -85,13 +83,23 @@ app.get('/chats/:id/messages', async (request, response) => {
     let data = await getChatList()
     let specificRoom = data.find((chat) => chat.id == id)
 
-    response.render('chatside', { chatnavn: specificRoom.chatnavn, chatcontainer: specificRoom.chat, chatid: specificRoom.id, username: request.session.un })
+    response.render('chatside', { 
+        chatnavn: specificRoom.chatnavn,
+        chatcontainer: specificRoom.chat,
+        chatid: specificRoom.id,
+        username: request.session.un })
 })
 
 app.get('/:chats/messages/:id', async (request, response) => {
     let data = await getChatList()
-    let specificmessage = data.find((room) => room.id == request.params.chats).chat.find((message) => message.messageid === request.params.id)
-    response.render('specificmessage', { message: specificmessage })
+    let specificmessage = data.find((room) => 
+        room.id == request.params.chats).chat.find((message) => 
+            message.messageid === request.params.id)
+    
+    response.render('specificmessage', {
+        message: specificmessage,
+        sessionname: request.session.un,
+        sessionlv: request.session.lv})
 });
 
 /////lv.3 superbruger adgange/////
@@ -121,7 +129,9 @@ app.get('/user/:username', async (request, response) => {
             const messages = chats
                 .flatMap(chat => chat.chat)
                 .filter(message => message.owner === username)
-            response.render('profil', { user, messages })
+
+            const userCreatedChatrooms = await createdChatrooms(username)
+            response.render('profil', { user, messages, createdChatrooms: userCreatedChatrooms })
         } else {
             response.status(404).send('Bruger ikke fundet')
         }
@@ -131,9 +141,6 @@ app.get('/user/:username', async (request, response) => {
     }
 });
 
-app.get('/users/:id/messages', (request, response) => {
-    //To do
-});
 
 app.post('/createchat', async (request, response) => {
     const chatnavn = request.body.chatnavn;
@@ -141,7 +148,6 @@ app.post('/createchat', async (request, response) => {
 
     try {
         const newChatObj = await newChat(chatnavn, request.session.un, data);
-        console.log(newChatObj);
         response.redirect(`/chats/${newChatObj.id}/messages`);
     } catch (error) {
         console.error('Error creating chat:', error.message);

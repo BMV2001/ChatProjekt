@@ -7,8 +7,16 @@ html
         p Adgangsniveau: #{user.lv}
         a(href="/users") Tilbage
 
+        h2 Dine chatrooms
+        if createdChatrooms && createdChatrooms.length > 0
+            u1 
+                each chatroom in createdChatrooms 
+                    a(href=`/chats/${chatroom.id}/messages`) #{chatroom.chatnavn} - #{chatroom.id}
+        
         h2 Beskeder 
-        u1
-            each message in messages
-                li #{message.user}: #{message.message} - #{message.timestamp}
+        if messages && messages.length > 0
+            u1 
+                each message in messages
+                    li 
+                        a(href=`/chats/${message.chatroomid}/messages`) #{message.message} - #{message.chatroomid}
                     

@@ -29,6 +29,10 @@ html
                 br
                 button: a(href="/users") Liste over brugere
 
+            h2 Profil
+                br
+                button: a(href=`/user/${usersession.un}`) Se profil
+
             if chatlist.length <= 0
                 p Eder thi er ej del af nogle chats! Du må være ensom
 
