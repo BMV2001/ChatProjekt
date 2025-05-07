@@ -2,7 +2,6 @@ import express, { response } from 'express'
 import session from 'express-session'
 import { validateLogin, createUser, getUsers } from './assets/scripts/userHandler.js'
 import { newChat, getChatList } from './assets/scripts/chatHandler.js'
-import methodOverride from 'method-override'
 import { deleteMessage, sendMessage } from './assets/scripts/messageHandler.js'
 
 //init
@@ -16,13 +15,10 @@ app.use(session({
     resave: true
 }))
 
-app.use(express.json())
 app.use(express.urlencoded({extended: true}))
+app.use(express.json())
 app.use(guestSession)
 app.use(express.static('assets'))
-//methodOverride -> opretter proper put-requests for opretBruger
-app.use(methodOverride('_method'))
-
 
 //endpoints
 app.post('/login', (request, response) => {
@@ -41,15 +37,21 @@ app.post('/logud', (request, response) => {
     response.redirect('/')
 })
 
-app.put('/createuser', (request, response) => {
+app.post('/createuser', (request, response) => {
+    console.log(request.body); //skal ændres enten til form eller laves ordentligt!
+    /*
     let username = request.body.un
     let password = request.body.pw
     createUser(username, password).then((user) => {
         if (user != undefined){
             setSession(user, request.session)
+            response.sendStatus(200) //success
         }
-        response.redirect("/")        
+        else (
+            response.sendStatus(409) //konflikt med navn
+        )
     })
+        */
 })
 
 app.post('/postmessage', async (request, response) => {
