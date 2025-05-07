@@ -6,4 +6,5 @@ html
         p Liste af brugere 
         ul 
             each user in userlist 
-                li #{user.un}
+                li 
+                    a(href=`/user/${user.un}`) #{user.un}

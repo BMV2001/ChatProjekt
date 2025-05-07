@@ -17,7 +17,7 @@ app.use(session({
 }))
 
 app.use(express.json())
-app.use(express.urlencoded({extended: true}))
+app.use(express.urlencoded({ extended: true }))
 app.use(guestSession)
 app.use(express.static('assets'))
 //methodOverride -> opretter proper put-requests for opretBruger
@@ -29,10 +29,10 @@ app.post('/login', (request, response) => {
     let username = request.body.un
     let password = request.body.pw
     validateLogin(username, password).then((user) => {
-        if (user != undefined){
+        if (user != undefined) {
             setSession(user, request.session)
         }
-            response.redirect("/")
+        response.redirect("/")
     })
 })
 
@@ -45,10 +45,10 @@ app.put('/createuser', (request, response) => {
     let username = request.body.un
     let password = request.body.pw
     createUser(username, password).then((user) => {
-        if (user != undefined){
+        if (user != undefined) {
             setSession(user, request.session)
         }
-        response.redirect("/")        
+        response.redirect("/")
     })
 })
 
@@ -75,9 +75,9 @@ app.delete('/deletemessage/:chatid/:messageid', (request, response) => {
 
 //Endpointet /chats og /chats/:id er tilgængeligt fra /(root) endpointet 
 
-app.get('/', async (request, response) =>  {
+app.get('/', async (request, response) => {
     let data = await getChatList()
-    response.render('home', {usersession: request.session, chatlist: request.session.chatlist, globalchats: data})
+    response.render('home', { usersession: request.session, chatlist: request.session.chatlist, globalchats: data })
 })
 
 app.get('/chats/:id/messages', async (request, response) => {
@@ -85,27 +85,50 @@ app.get('/chats/:id/messages', async (request, response) => {
     let data = await getChatList()
     let specificRoom = data.find((chat) => chat.id == id)
 
-    response.render('chatside', {chatnavn: specificRoom.chatnavn, chatcontainer: specificRoom.chat, chatid: specificRoom.id, username: request.session.un})
+    response.render('chatside', { chatnavn: specificRoom.chatnavn, chatcontainer: specificRoom.chat, chatid: specificRoom.id, username: request.session.un })
 })
 
 app.get('/:chats/messages/:id', async (request, response) => {
     let data = await getChatList()
     let specificmessage = data.find((room) => room.id == request.params.chats).chat.find((message) => message.messageid === request.params.id)
-    response.render('specificmessage', {message: specificmessage})
+    response.render('specificmessage', { message: specificmessage })
 });
 
 /////lv.3 superbruger adgange/////
-app.get('/users', (request, response) => {
-    if (request.session.lv != 3){
+app.get('/users', async (request, response) => {
+    if (request.session.lv != 3) {
         response.redirect('/')
     }
-    else{
-        getUsers().then((userlist) => {response.render('users', {userlist: userlist})})
+    else {
+        try {
+            const userlist = await getUsers()
+            response.render('users', { userlist: userlist })
+        } catch (error) {
+            console.error('Error fetching users:', error.message)
+            response.status(500).send('Serverfejl')
+        }
     }
 });
 
-app.get('/users/:id', (request, response) => {
-    //To do
+app.get('/user/:username', async (request, response) => {
+    try {
+        const username = request.params.username
+        const userlist = await getUsers()
+
+        const user = userlist.find(user => user.un === username)
+        if (user) {
+            const chats = await getChatList()
+            const messages = chats
+                .flatMap(chat => chat.chat)
+                .filter(message => message.owner === username)
+            response.render('profil', { user, messages })
+        } else {
+            response.status(404).send('Bruger ikke fundet')
+        }
+    } catch (error) {
+        console.error('Error fetching user:', error.message)
+        response.status(500).send('Serverfejl');
+    }
 });
 
 app.get('/users/:id/messages', (request, response) => {
@@ -135,15 +158,15 @@ app.listen(6789, () => console.log("Det spiller chef"))
 
 //funktioner
 
-function setSession(user, session){
+function setSession(user, session) {
     session.login = true;
     session.un = user.un
     session.lv = user.lv
 }
 
 //middleware function til default guest-bruger oprettelse
-function guestSession(request, response, next){
-    if (request.session.lv === undefined){
+function guestSession(request, response, next) {
+    if (request.session.lv === undefined) {
         request.session.chatlist = []
         request.session.login = false
         request.session.un = "guest"

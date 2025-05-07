@@ -1,0 +1,14 @@
+html
+    head
+        title #{user.un}'s Profil
+    body
+        h1 #{user.un}'s Profil
+        p Navn: #{user.un}
+        p Adgangsniveau: #{user.lv}
+        a(href="/users") Tilbage
+
+        h2 Beskeder 
+        u1
+            each message in messages
+                li #{message.user}: #{message.message} - #{message.timestamp}
+                    
