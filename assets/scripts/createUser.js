@@ -1,26 +1,28 @@
+let htmlButton = document.getElementById("createuser")
 
-document.getElementById("createuser").addEventListener('click', x)
-
-function x(){ //virker ej!
-    let username = document.getElementById("un").value
-    let password = document.getElementById("pw").value
-    let body = JSON.stringify({un: username, pw: password})
-    let response = {
-        method: "POST",
-        body: body
-    }
-    createUser(response).then(response => { 
-        if (response.ok){
-            console.log("det spiller");
-        }
-        else {
-            console.log(response);
-        }
-    }).catch(e => console.log(e))
+if (htmlButton != null){
+    htmlButton.addEventListener('click', x)
 }
 
+async function x(){ 
+    let username = document.getElementById("newun").value
+    let password = document.getElementById("newpw").value
+    let body = JSON.stringify({un: username, pw: password})
+    let messageNode = document.getElementById("createStatus")
 
-async function createUser(responseBody){
-    let response = await fetch('/createuser', responseBody)
-    return response;
+    const response = await fetch('/createUser', 
+               {
+                headers: { 'Content-Type': 'application/json' },
+                method: 'POST',
+                redirect: 'follow',
+                body: body
+                });   
+    if (response.status != 409){
+        messageNode.innerHTML = "Din bruger er nu oprettet!"
+        //messageNode.setAttribute("hidden", "false")
+    }
+    else {
+        messageNode.innerHTML = "Brugernavn er optaget!"
+        //messageNode.setAttribute("hidden", "false")
+    }
 }

@@ -1,7 +1,7 @@
 html 
     head 
         title chatrooms
-        script(async, defer, src="/scripts/createUser.js")
+        script(defer, src="/scripts/createUser.js")
     body 
         if usersession.login != true
             h1 Velkommen! 
@@ -14,10 +14,11 @@ html
                 button(type="submit") log ind
             h Har du ikke en bruger?
             br
-            input(id="un", type="text", placeholder="brugernavn", minlength="3")
-            input(id="pw", type="text", placeholder="adgangskode", minlength="5")
+            input(id="newun", type="text", placeholder="brugernavn")
+            input(id="newpw", type="text", placeholder="adgangskode")
             br
-            button(id="createuser" type="submit") Opret dig her!
+            button(id="createuser") Opret dig her!
+            h(id="createStatus") 
 
         else 
             h Velkommen #{usersession.un}

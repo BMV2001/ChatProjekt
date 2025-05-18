@@ -37,21 +37,18 @@ app.post('/logud', (request, response) => {
     response.redirect('/')
 })
 
-app.post('/createuser', (request, response) => {
-    console.log(request.body); //skal ændres enten til form eller laves ordentligt!
-    /*
+app.post('/createUser', (request, response) => {   
     let username = request.body.un
     let password = request.body.pw
     createUser(username, password).then((user) => {
         if (user != undefined){
             setSession(user, request.session)
-            response.sendStatus(200) //success
+            response.redirect('/')
         }
         else (
             response.sendStatus(409) //konflikt med navn
         )
     })
-        */
 })
 
 app.post('/postmessage', async (request, response) => {
