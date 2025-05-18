@@ -19,10 +19,8 @@ async function x(){
                 });   
     if (response.status != 409){
         messageNode.innerHTML = "Din bruger er nu oprettet!"
-        //messageNode.setAttribute("hidden", "false")
     }
     else {
         messageNode.innerHTML = "Brugernavn er optaget!"
-        //messageNode.setAttribute("hidden", "false")
     }
 }
