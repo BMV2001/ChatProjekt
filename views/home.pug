@@ -2,9 +2,11 @@ html
     head 
         title chatrooms
         script(defer, src="/scripts/createUser.js")
+        link(rel="stylesheet" href="/styles/home.css")
+   
     body 
         if usersession.login != true
-            h1 Velkommen! 
+            h1(id="greeting") Hil dig, dødelige gæst ! 
             h Du er ikke logget ind, men kan fortsætte som gæst.
                     
             form(action="/login", method="POST")
@@ -21,7 +23,7 @@ html
             h(id="createStatus") 
 
         else 
-            h Velkommen #{usersession.un}
+            h1(id="greeting") Velkommen #{usersession.un}
             form(action="/logud", method="POST")
                 button(type="submit") log ud
 
@@ -31,7 +33,7 @@ html
                 button: a(href="/users") Liste over brugere
 
             if chatlist.length <= 0
-                p Eder thi er ej del af nogle chats! Du må være ensom
+                p Eder thi ejer ej nogle chats! Du må være übber ensom
 
             else 
                 p chatlistens størrelse: #{chatlist.length}
@@ -47,6 +49,7 @@ html
 
             if error 
                 p.error-message #{error}
+
         if usersession.login == true
             form(action="/createchat", method="POST")
                 input(type="text", name="chatnavn", id="chatnavn", placeholder="Indtast chatnavn", required)

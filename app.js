@@ -61,6 +61,7 @@ app.post('/postmessage', async (request, response) => {
     response.redirect(`/chats/${chatID}/messages`)
 })
 
+//Virker kun med node, da delete genstarter serveren og nulstiller sessionen
 app.delete('/deletemessage/:chatid/:messageid', (request, response) => {
     const chatid = request.params.chatid
     const messageid = request.params.messageid
