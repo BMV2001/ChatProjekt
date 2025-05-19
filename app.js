@@ -1,6 +1,6 @@
 import express, { response } from 'express'
 import session from 'express-session'
-import { validateLogin, createUser, getUsers } from './assets/scripts/userHandler.js'
+import { validateLogin, createUser, getUsers, updateLvl } from './assets/scripts/userHandler.js'
 import { newChat, getChatList, createdChatrooms } from './assets/scripts/chatHandler.js'
 import methodOverride from 'method-override'
 import { deleteMessage, sendMessage } from './assets/scripts/messageHandler.js'
@@ -95,7 +95,7 @@ app.get('/:chats/messages/:id', async (request, response) => {
     let specificmessage = data.find((room) => 
         room.id == request.params.chats).chat.find((message) => 
             message.messageid === request.params.id)
-    
+
     response.render('specificmessage', {
         message: specificmessage,
         sessionname: request.session.un,
@@ -131,7 +131,10 @@ app.get('/user/:username', async (request, response) => {
                 .filter(message => message.owner === username)
 
             const userCreatedChatrooms = await createdChatrooms(username)
-            response.render('profil', { user, messages, createdChatrooms: userCreatedChatrooms })
+            response.render('profil', { user, 
+                sessionlv: request.session.lv, 
+                messages, 
+                createdChatrooms: userCreatedChatrooms })
         } else {
             response.status(404).send('Bruger ikke fundet')
         }
@@ -141,24 +144,38 @@ app.get('/user/:username', async (request, response) => {
     }
 });
 
+app.post('/user/:username/lvl', async (request, response) => {
+    if (request.session.lv != 3) {
+        return response.redirect('/user')
+    }
+
+    try {
+        const username = request.params.username
+        const newLevel = request.body.newlvl
+
+        await updateLvl(username, newLevel)
+    } catch (error) {
+        response.status(500).send('Serverfejl')
+    }
+})
 
 app.post('/createchat', async (request, response) => {
-    const chatnavn = request.body.chatnavn;
+    const chatnavn = request.body.chatnavn
     let data = await getChatList()
 
     try {
-        const newChatObj = await newChat(chatnavn, request.session.un, data);
-        response.redirect(`/chats/${newChatObj.id}/messages`);
+        const newChatObj = await newChat(chatnavn, request.session.un, data)
+        response.redirect(`/chats/${newChatObj.id}/messages`)
     } catch (error) {
-        console.error('Error creating chat:', error.message);
+        console.error('Error creating chat:', error.message)
         response.render('home', {
             usersession: request.session,
             chatlist: request.session.chatlist,
             globalchats: data,
             error: error.message
-        });
+        })
     }
-});
+})
 
 app.listen(6789, () => console.log("Det spiller chef"))
 
