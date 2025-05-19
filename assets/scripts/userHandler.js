@@ -49,4 +49,27 @@ async function getUsers(){
     return JSON.parse(rawtext)
 }
 
-export {validateLogin, createUser, getUsers}
+async function updateLvl(username, newLvl) {
+    try {
+        
+        const rawtext = await readFile("assets/DB/loginDB.JSON", "utf8")
+        const objectList = JSON.parse(rawtext)
+        
+        const user = objectList.find(user => user.un === username)
+        if (!user) {
+            throw new Error(`User ${username} not found`)
+        }
+
+        const level = parseInt(newLvl, 10)
+        user.lv = level
+
+        await writeFile('assets/DB/loginDB.JSON', JSON.stringify(objectList, null, 2))
+        return user
+    }
+    catch (error) {
+        console.error("Error updating user level:", error)
+        throw error
+    }
+}
+
+export {validateLogin, createUser, getUsers, updateLvl}

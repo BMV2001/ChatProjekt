@@ -46,4 +46,15 @@ async function getChatList() {
     }
 }
 
-export { newChat, roomExists, getChatList };
+async function createdChatrooms(username) {
+    try {
+        const chatList = await getChatList();
+        const userChatrooms = chatList.filter(chat => chat.ejer === username);
+        return userChatrooms;
+    }
+    catch (error) {
+        console.error("fejl", error);
+    }
+}
+
+export { newChat, roomExists, getChatList, createdChatrooms };

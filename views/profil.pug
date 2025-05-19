@@ -1,0 +1,28 @@
+html
+    head
+        title #{user.un}'s Profil
+    body
+        h1 #{user.un}'s Profil
+        p Navn: #{user.un}
+        p Adgangsniveau: #{user.lv}
+        if sessionlv == 3
+            form(action=`/user/${user.un}/lvl`, method="POST")
+                input(type="number", name="newlvl", min="2", max="3", value=user.lv, required)
+                button(type="submit") Ændre
+        a(href="/users") Tilbage
+
+
+
+        h2 Dine chatrooms
+        if createdChatrooms && createdChatrooms.length > 0
+            u1 
+                each chatroom in createdChatrooms 
+                    a(href=`/chats/${chatroom.id}/messages`) #{chatroom.chatnavn} - #{chatroom.id}
+        
+        h2 Beskeder 
+        if messages && messages.length > 0
+            u1 
+                each message in messages
+                    li 
+                        a(href=`/chats/${message.chatroomid}/messages`) #{message.message} - #{message.chatroomid}
+                    
