@@ -70,8 +70,6 @@ app.delete('/deletemessage/:chatid/:messageid', (request, response) => {
     const messageid = request.params.messageid
     deleteMessage(chatid, messageid)
     response.sendStatus(200)
-    deleteMessage(chatid, messageid)
-    response.sendStatus(200)
 })
 
 //Obligatoriske endpoints
@@ -98,10 +96,6 @@ app.get('/chats/:id/messages', async (request, response) => {
 app.get('/:chats/messages/:id', async (request, response) => {
     let data = await getChatList()
 
-    response.render('specificmessage', {
-        message: specificmessage,
-        sessionname: request.session.un,
-        sessionlv: request.session.lv})
     let specificmessage = data.find((room) => room.id == request.params.chats).chat.find((message) => message.messageid === request.params.id)
     response.render('specificmessage', {message: specificmessage, sessionname: request.session.un, sessionlv: request.session.lv})
 });

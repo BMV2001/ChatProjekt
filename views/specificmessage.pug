@@ -13,7 +13,7 @@ html
         br
         p(id="chatid", itemid=message.chatroomid) tilhørende chatrumID: #{message.chatroomid}
         br
-        if (sessionname != guest && message.owner == sessionname || sessionlv == 3)
+        if ((sessionname != guest && message.owner == sessionname) || sessionlv == 3)
             button(id="deletebutton" type="submit") Slet besked 
         br
         a(href='/chats/'+message.chatroomid+"/messages") Gå tilbage til chatten her
