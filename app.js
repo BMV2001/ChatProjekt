@@ -1,8 +1,9 @@
-import express, { response } from 'express'
+import express from 'express'
 import session from 'express-session'
 import { validateLogin, createUser, getUsers, updateLvl } from './assets/scripts/userHandler.js'
 import { newChat, getChatList, createdChatrooms } from './assets/scripts/chatHandler.js'
 import { deleteMessage, sendMessage } from './assets/scripts/messageHandler.js'
+
 
 //init
 const app = express()
@@ -17,10 +18,10 @@ app.use(session({
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+app.use(express.urlencoded({extended: true}))
+app.use(express.json())
 app.use(guestSession)
 app.use(express.static('assets'))
-
-
 
 //endpoints
 app.post('/login', (request, response) => {
@@ -39,14 +40,17 @@ app.post('/logud', (request, response) => {
     response.redirect('/')
 })
 
-app.put('/createuser', (request, response) => {
+app.post('/createUser', (request, response) => {   
     let username = request.body.un
     let password = request.body.pw
     createUser(username, password).then((user) => {
         if (user != undefined) {
             setSession(user, request.session)
+            response.redirect('/')
         }
-        response.redirect("/")
+        else {
+            response.sendStatus(409) //konflikt med navn
+        }
     })
 })
 
@@ -60,6 +64,7 @@ app.post('/postmessage', async (request, response) => {
     response.redirect(`/chats/${chatID}/messages`)
 })
 
+//Virker kun med node, da delete genstarter serveren og nulstiller sessionen
 app.delete('/deletemessage/:chatid/:messageid', (request, response) => {
     const chatid = request.params.chatid
     const messageid = request.params.messageid
@@ -90,25 +95,20 @@ app.get('/chats/:id/messages', async (request, response) => {
 
 app.get('/:chats/messages/:id', async (request, response) => {
     let data = await getChatList()
-    let specificmessage = data.find((room) => 
-        room.id == request.params.chats).chat.find((message) => 
-            message.messageid === request.params.id)
 
-    response.render('specificmessage', {
-        message: specificmessage,
-        sessionname: request.session.un,
-        sessionlv: request.session.lv})
+    let specificmessage = data.find((room) => room.id == request.params.chats).chat.find((message) => message.messageid === request.params.id)
+    response.render('specificmessage', {message: specificmessage, sessionname: request.session.un, sessionlv: request.session.lv})
 });
 
 /////lv.3 superbruger adgange/////
-app.get('/users', async (request, response) => {
-    if (request.session.lv != 3) {
+app.get('/users', (request, response) => {
+    if (request.session.lv != 3){
         response.redirect('/')
     }
     else {
         try {
-            const userlist = await getUsers()
-            response.render('users', { userlist: userlist })
+            getUsers().then((userlist) => {response.render('users', { userlist: userlist })})
+        
         } catch (error) {
             console.error('Error fetching users:', error.message)
             response.status(500).send('Serverfejl')
@@ -164,7 +164,8 @@ app.post('/createchat', async (request, response) => {
     try {
         const newChatObj = await newChat(chatnavn, request.session.un, data)
         response.redirect(`/chats/${newChatObj.id}/messages`)
-    } catch (error) {
+    } 
+    catch (error) {
         console.error('Error creating chat:', error.message)
         response.render('home', {
             usersession: request.session,

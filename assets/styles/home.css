@@ -1,0 +1,14 @@
+body {
+    background-color: lightblue;
+}
+
+li{
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+#greeting{
+    text-align: center;
+    font-style: italic;
+    color: white;
+}
+

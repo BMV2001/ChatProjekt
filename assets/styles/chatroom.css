@@ -1,0 +1,25 @@
+body{
+    background-color: red;
+}
+
+li, h1, h5{
+    font-family:Arial, Helvetica, sans-serif;
+    color: black;
+}
+
+#brugernavn{
+    position: absolute;
+    top: 30;
+    left: 30;
+    text-decoration: underline;
+    font-style: italic;
+
+}
+
+#kat{
+    border-radius: 8px;
+    position: absolute;
+    top: 60;
+    right: 10;
+}
+

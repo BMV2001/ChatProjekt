@@ -9,7 +9,7 @@ async function deletemessage(){
     const chatroomid = document.getElementById("chatid").attributes.getNamedItem("itemid").value
 
     let htmlRes = await fetch('/deleteMessage/'+chatroomid+"/"+messageid, {
-                method: "DELETE"})
+                        method: "DELETE"})
 
     if (htmlRes.status == 200){
         document.body.innerHTML += "<p> Beskeden er slettet - du kan gå tilbage til chatten nu </p>"

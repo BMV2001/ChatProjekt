@@ -1,10 +1,11 @@
 html 
     head 
         title Chatrum
+        link(rel="stylesheet" href="/styles/chatroom.css")
     body
-        h Chatrum for #{chatnavn}
+        h1 Chatrum for #{chatnavn}
         br
-        h Dit navn for chatten: #{username}
+        h5(id="brugernavn") Dit navn for chatten: #{username}
         ul 
             each besked in chatcontainer 
              li: a(href="/"+chatid+"/messages/"+besked.messageid) #{besked.owner}: #{besked.message}
@@ -16,5 +17,7 @@ html
             input(name= "chatcontainer", type="hidden", value= chatcontainer)
             br
             button(type="submit", id="send") fyr
-        
-        a(href= "/") kom tilbage her
+
+        img(id="kat" src="/katte/djævleKat.png" alt="Du er blind for helvede, du kan jo ikke se!" height=250)
+        br
+        h1: a(href= "/") Undslip skærsilden
