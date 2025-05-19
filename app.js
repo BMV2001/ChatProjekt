@@ -2,7 +2,6 @@ import express, { response } from 'express'
 import session from 'express-session'
 import { validateLogin, createUser, getUsers, updateLvl } from './assets/scripts/userHandler.js'
 import { newChat, getChatList, createdChatrooms } from './assets/scripts/chatHandler.js'
-import methodOverride from 'method-override'
 import { deleteMessage, sendMessage } from './assets/scripts/messageHandler.js'
 
 //init
@@ -20,8 +19,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(guestSession)
 app.use(express.static('assets'))
-//methodOverride -> opretter proper put-requests for opretBruger
-app.use(methodOverride('_method'))
+
 
 
 //endpoints
