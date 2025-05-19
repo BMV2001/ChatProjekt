@@ -1,6 +1,5 @@
 import {readFile, writeFile} from "node:fs/promises"
 import { error } from "node:console";
-import { write } from "node:fs";
 
 async function validateLogin(username, password) {
     try {

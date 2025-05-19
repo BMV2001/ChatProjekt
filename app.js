@@ -24,6 +24,8 @@ app.use(guestSession)
 app.use(express.static('assets'))
 
 //endpoints
+//Endpointet /chats og /chats/:id er tilgængeligt fra /(root) endpointet 
+
 app.post('/login', (request, response) => {
     let username = request.body.un
     let password = request.body.pw
@@ -72,9 +74,6 @@ app.delete('/deletemessage/:chatid/:messageid', (request, response) => {
     response.sendStatus(200)
 })
 
-//Obligatoriske endpoints
-
-//Endpointet /chats og /chats/:id er tilgængeligt fra /(root) endpointet 
 
 app.get('/', async (request, response) => {
     let data = await getChatList()
@@ -97,7 +96,7 @@ app.get('/:chats/messages/:id', async (request, response) => {
     let data = await getChatList()
 
     let specificmessage = data.find((room) => room.id == request.params.chats).chat.find((message) => message.messageid === request.params.id)
-    response.render('specificmessage', {message: specificmessage, sessionname: request.session.un, sessionlv: request.session.lv})
+    response.render('specificmessage', {message: specificmessage, sessionname: request.session.un, sessionlv: request.session.lv, login: session.login})
 });
 
 /////lv.3 superbruger adgange/////

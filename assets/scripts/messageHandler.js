@@ -20,7 +20,7 @@ async function deleteMessage(chatroomid, messageid){
     
     let updatedChat = chatroom.chat.filter((message) => message.messageid !== messageid)
     chatroom.chat = updatedChat
-    //kæmpe skamfuld metode som tager vitterligt ALLE chats, ændrer EN besked, og sætter HELE LORTET ind igen
+    //kæmpe skamfuld metode som tager vitterligt ALLE chats, ændrer EN besked, og sætter HELE ALT ind igen
     //Jeg giver hermed alle rettidheder til at eksperterne fratager mig mit endelige eksamensbevis når den skæbnes svanger dag kommer frem
     await writeFile('assets/DB/chatDB.JSON', JSON.stringify(chatList))
 }
