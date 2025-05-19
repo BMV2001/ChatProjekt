@@ -18,8 +18,6 @@ app.use(session({
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-app.use(express.urlencoded({extended: true}))
-app.use(express.json())
 app.use(guestSession)
 app.use(express.static('assets'))
 
