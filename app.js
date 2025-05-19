@@ -1,12 +1,9 @@
-import express, { response } from 'express'
+import express from 'express'
 import session from 'express-session'
 import { validateLogin, createUser, getUsers, updateLvl } from './assets/scripts/userHandler.js'
 import { newChat, getChatList, createdChatrooms } from './assets/scripts/chatHandler.js'
-import methodOverride from 'method-override'
 import { deleteMessage, sendMessage } from './assets/scripts/messageHandler.js'
-import { validateLogin, createUser, getUsers } from './assets/scripts/userHandler.js'
-import { newChat, getChatList } from './assets/scripts/chatHandler.js'
-import { deleteMessage, sendMessage } from './assets/scripts/messageHandler.js'
+
 
 //init
 const app = express()
@@ -51,10 +48,9 @@ app.post('/createUser', (request, response) => {
             setSession(user, request.session)
             response.redirect('/')
         }
-        response.redirect("/")
-        else (
+        else {
             response.sendStatus(409) //konflikt med navn
-        )
+        }
     })
 })
 
@@ -101,9 +97,6 @@ app.get('/chats/:id/messages', async (request, response) => {
 
 app.get('/:chats/messages/:id', async (request, response) => {
     let data = await getChatList()
-    let specificmessage = data.find((room) => 
-        room.id == request.params.chats).chat.find((message) => 
-            message.messageid === request.params.id)
 
     response.render('specificmessage', {
         message: specificmessage,
@@ -114,16 +107,14 @@ app.get('/:chats/messages/:id', async (request, response) => {
 });
 
 /////lv.3 superbruger adgange/////
-app.get('/users', async (request, response) => {
-    if (request.session.lv != 3) {
 app.get('/users', (request, response) => {
     if (request.session.lv != 3){
         response.redirect('/')
     }
     else {
         try {
-            const userlist = await getUsers()
-            response.render('users', { userlist: userlist })
+            getUsers().then((userlist) => {response.render('users', { userlist: userlist })})
+        
         } catch (error) {
             console.error('Error fetching users:', error.message)
             response.status(500).send('Serverfejl')
@@ -179,9 +170,8 @@ app.post('/createchat', async (request, response) => {
     try {
         const newChatObj = await newChat(chatnavn, request.session.un, data)
         response.redirect(`/chats/${newChatObj.id}/messages`)
-        const newChatObj = await newChat(chatnavn, request.session.un, data);
-        response.redirect(`/chats/${newChatObj.id}/messages`);
-    } catch (error) {
+    } 
+    catch (error) {
         console.error('Error creating chat:', error.message)
         response.render('home', {
             usersession: request.session,
